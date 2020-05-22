@@ -1,6 +1,6 @@
 {
   "name": "whim-client-vue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/whim-client-vue.common.js",
   "scripts": {
     "build": "vue-cli-service build --target lib --name whim-client-vue ./src/main.js"

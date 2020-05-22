@@ -1611,7 +1611,7 @@ var web_dom_collections_for_each = __webpack_require__("159b");
 
 // appStateの更新、clinet & server
 var postAppState = function postAppState(appState) {
-  // その前に差分のappStateにも同期させたい
+  // TODO その前に差分のappStateにも同期させたい
   window.parent.postMessage({
     appState: appState
   }, document.referrer);
@@ -1688,7 +1688,7 @@ var getters = {
   install: function install(Vue, options) {
     if (!options.store) {
       throw new Error("Please provide vuex store.");
-    } // Register toasts vuex module
+    } // Register vuex module
 
 
     options.store.registerModule("whimClient", store); // wh.im本体との通信を開始
@@ -1709,13 +1709,9 @@ var getters = {
       }
 
       if (event.data.appState) {
-        console.log("hoge");
-        console.log(event.data.appState);
         options.store.commit("whimClient/setAppState", event.data.appState);
       }
-    }, false); // const state = options.store.state.whimCLI;
-    // Adding $toasts to Vue.prototype allows us to use $toasts within Vue as this.$toasts()
-
+    }, false);
     var prototypeWhim = {
       assignState: function assignState(obj) {
         return options.store.dispatch("whimClient/assignState", obj);
@@ -1730,7 +1726,7 @@ var getters = {
     Object.defineProperty(prototypeWhim, "users", {
       enumberable: true,
       get: function get() {
-        return options.store.state.users;
+        return options.store.getters["whimClient/users"];
       }
     });
     Object.defineProperty(prototypeWhim, "accessUser", {

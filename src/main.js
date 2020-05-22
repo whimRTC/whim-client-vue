@@ -29,8 +29,6 @@ export default {
           options.store.commit("whimClient/setUsers", event.data.users);
         }
         if (event.data.appState) {
-          console.log("hoge");
-          console.log(event.data.appState);
           options.store.commit("whimClient/setAppState", event.data.appState);
         }
       },
