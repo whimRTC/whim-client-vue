@@ -1728,8 +1728,8 @@ var getters = {
       replaceState: function replaceState(obj) {
         return options.store.dispatch("whimClient/replaceState", obj);
       },
-      deleteState: function deleteState(obj) {
-        return options.store.dispatch("whimClient/deleteState", obj);
+      deleteState: function deleteState() {
+        return options.store.dispatch("whimClient/deleteState");
       }
     };
     Object.defineProperty(prototypeWhim, "users", {

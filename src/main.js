@@ -44,8 +44,8 @@ export default {
         return options.store.dispatch("whimClient/replaceState", obj);
       },
 
-      deleteState(obj) {
-        return options.store.dispatch("whimClient/deleteState", obj);
+      deleteState() {
+        return options.store.dispatch("whimClient/deleteState");
       }
     };
 
