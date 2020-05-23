@@ -1608,16 +1608,7 @@ var web_dom_collections_for_each = __webpack_require__("159b");
 
 
 
-
-// appStateの更新、clinet & server
-var postAppState = function postAppState(appState) {
-  // TODO その前に差分のappStateにも同期させたい
-  window.parent.postMessage({
-    appState: appState
-  }, document.referrer);
-}; // initial state
-
-
+// initial state
 var state = {
   room: {},
   // room information
@@ -1644,18 +1635,24 @@ var mutations = {
 };
 var actions = {
   assignState: function assignState(_ref, obj) {
-    var state = _ref.state;
+    var state = _ref.state,
+        dispatch = _ref.dispatch;
     var appState = state.appState;
     Object.keys(obj).forEach(function (key) {
       appState[key] = obj[key];
     });
-    postAppState(appState);
+    dispatch("replaceState", appState);
   },
-  replaceState: function replaceState(obj) {
-    postAppState(obj);
+  deleteState: function deleteState(_ref2) {
+    var dispatch = _ref2.dispatch;
+    dispatch("replaceState", {});
   },
-  deleteState: function deleteState() {
-    postAppState({});
+  replaceState: function replaceState(_ref3, appState) {
+    var commit = _ref3.commit;
+    commit("setAppState", appState);
+    window.parent.postMessage({
+      appState: appState
+    }, document.referrer);
   }
 };
 var getters = {

@@ -1,9 +1,3 @@
-// appStateの更新、clinet & server
-const postAppState = appState => {
-  // TODO その前に差分のappStateにも同期させたい
-  window.parent.postMessage({ appState }, document.referrer);
-};
-
 // initial state
 const state = {
   room: {}, // room information
@@ -29,18 +23,19 @@ const mutations = {
 };
 
 const actions = {
-  assignState({ state }, obj) {
+  assignState({ state, dispatch }, obj) {
     let appState = state.appState;
     Object.keys(obj).forEach(key => {
       appState[key] = obj[key];
     });
-    postAppState(appState);
+    dispatch("replaceState", appState);
   },
-  replaceState(obj) {
-    postAppState(obj);
+  deleteState({ dispatch }) {
+    dispatch("replaceState", {});
   },
-  deleteState() {
-    postAppState({});
+  replaceState({ commit }, appState) {
+    commit("setAppState", appState);
+    window.parent.postMessage({ appState }, document.referrer);
   }
 };
 
