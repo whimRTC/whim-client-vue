@@ -2,6 +2,7 @@
   "name": "whim-client-vue",
   "version": "1.0.2",
   "main": "dist/whim-client-vue.common.js",
+  "license": "MIT",
   "scripts": {
     "build": "vue-cli-service build --target lib --name whim-client-vue ./src/main.js"
   },
