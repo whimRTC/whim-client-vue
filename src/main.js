@@ -50,28 +50,28 @@ export default {
     };
 
     Object.defineProperty(prototypeWhim, "users", {
-      enumberable: true,
+      enumerable: true,
       get: function() {
         return options.store.getters["whimClient/users"];
       }
     });
 
     Object.defineProperty(prototypeWhim, "accessUser", {
-      enumberable: true,
+      enumerable: true,
       get: function() {
         return options.store.getters["whimClient/accessUser"];
       }
     });
 
     Object.defineProperty(prototypeWhim, "room", {
-      enumberable: true,
+      enumerable: true,
       get: function() {
         return options.store.getters["whimClient/room"];
       }
     });
 
     Object.defineProperty(prototypeWhim, "state", {
-      enumberable: true,
+      enumerable: true,
       get: function() {
         return options.store.getters["whimClient/appState"];
       }
