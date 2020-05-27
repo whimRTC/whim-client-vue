@@ -82,7 +82,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "fb15");
+/******/ 	return __webpack_require__(__webpack_require__.s = "fae3");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -240,6 +240,36 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "1eb2":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// This file is imported into lib/wc client bundles.
+
+if (typeof window !== 'undefined') {
+  var currentScript = window.document.currentScript
+  if (true) {
+    var getCurrentScript = __webpack_require__("8875")
+    currentScript = getCurrentScript()
+
+    // for backward compatibility, because previously we directly included the polyfill
+    if (!('currentScript' in document)) {
+      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
+    }
+  }
+
+  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
+  if (src) {
+    __webpack_require__.p = src[1] // eslint-disable-line
+  }
+}
+
+// Indicate to webpack that this file can be concatenated
+/* unused harmony default export */ var _unused_webpack_default_export = (null);
+
+
+/***/ }),
+
 /***/ "23cb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -387,6 +417,93 @@ module.exports = global;
 
 /***/ }),
 
+/***/ "4360":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__("7db0");
+
+__webpack_require__("4160");
+
+__webpack_require__("b64b");
+
+__webpack_require__("159b");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+}); // initial state
+
+var state = {
+  room: {},
+  users: [],
+  accessUserId: null,
+  appState: {}
+}; // mutations
+
+var mutations = {
+  setRoom: function setRoom(state, room) {
+    state.room = room;
+  },
+  setUsers: function setUsers(state, users) {
+    state.users = users;
+  },
+  setAccessUserId: function setAccessUserId(state, userId) {
+    state.accessUserId = userId;
+  },
+  setAppState: function setAppState(state, appState) {
+    state.appState = appState;
+  }
+};
+var actions = {
+  assignState: function assignState(_ref, obj) {
+    var state = _ref.state,
+        dispatch = _ref.dispatch;
+    var appState = state.appState;
+    Object.keys(obj).forEach(function (key) {
+      appState[key] = obj[key];
+    });
+    dispatch("replaceState", appState);
+  },
+  deleteState: function deleteState(_ref2) {
+    var dispatch = _ref2.dispatch;
+    dispatch("replaceState", {});
+  },
+  replaceState: function replaceState(_ref3, appState) {
+    var commit = _ref3.commit;
+    commit("setAppState", appState);
+    window.parent.postMessage({
+      appState: appState
+    }, document.referrer);
+  }
+};
+var getters = {
+  room: function room(state) {
+    return state.room;
+  },
+  users: function users(state) {
+    return state.users;
+  },
+  appState: function appState(state) {
+    return state.appState;
+  },
+  accessUser: function accessUser(state) {
+    return state.users.find(function (user) {
+      return user.id === state.accessUserId;
+    });
+  }
+};
+exports.default = {
+  namespaced: true,
+  state: state,
+  mutations: mutations,
+  actions: actions,
+  getters: getters
+};
+
+/***/ }),
+
 /***/ "44ad":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -529,6 +646,94 @@ var store = __webpack_require__("c6cd");
   copyright: '© 2020 Denis Pushkarev (zloirock.ru)'
 });
 
+
+/***/ }),
+
+/***/ "56d7":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var store_1 = __importDefault(__webpack_require__("4360")); // Vuex toasts module
+
+
+exports.default = {
+  install: function install(Vue, options) {
+    if (!options.store) {
+      throw new Error("Please provide vuex store.");
+    } // Register vuex module
+
+
+    options.store.registerModule("whimClient", store_1.default); // wh.im本体との通信を開始
+
+    window.parent.postMessage("connect", document.referrer); // wh.imから room / users情報が送られてきたら登録
+
+    window.addEventListener("message", function (event) {
+      if (event.data.room) {
+        options.store.commit("whimClient/setRoom", event.data.room);
+      }
+
+      if (event.data.accessUserId) {
+        options.store.commit("whimClient/setAccessUserId", event.data.accessUserId);
+      }
+
+      if (event.data.users) {
+        options.store.commit("whimClient/setUsers", event.data.users);
+      }
+
+      if (event.data.appState) {
+        options.store.commit("whimClient/setAppState", event.data.appState);
+      }
+    }, false);
+    var prototypeWhim = {
+      assignState: function assignState(obj) {
+        return options.store.dispatch("whimClient/assignState", obj);
+      },
+      replaceState: function replaceState(obj) {
+        return options.store.dispatch("whimClient/replaceState", obj);
+      },
+      deleteState: function deleteState() {
+        return options.store.dispatch("whimClient/deleteState");
+      }
+    };
+    Object.defineProperty(prototypeWhim, "users", {
+      enumerable: true,
+      get: function get() {
+        return options.store.getters["whimClient/users"];
+      }
+    });
+    Object.defineProperty(prototypeWhim, "accessUser", {
+      enumerable: true,
+      get: function get() {
+        return options.store.getters["whimClient/accessUser"];
+      }
+    });
+    Object.defineProperty(prototypeWhim, "room", {
+      enumerable: true,
+      get: function get() {
+        return options.store.getters["whimClient/room"];
+      }
+    });
+    Object.defineProperty(prototypeWhim, "state", {
+      enumerable: true,
+      get: function get() {
+        return options.store.getters["whimClient/appState"];
+      }
+    });
+    Vue.prototype.$whim = prototypeWhim;
+  }
+};
 
 /***/ }),
 
@@ -1560,197 +1765,16 @@ module.exports = function (key) {
 
 /***/ }),
 
-/***/ "fb15":
+/***/ "fae3":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _setPublicPath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1eb2");
+/* harmony import */ var _entry__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("56d7");
+/* harmony import */ var _entry__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_entry__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _entry__WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _entry__WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 
-// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
-// This file is imported into lib/wc client bundles.
-
-if (typeof window !== 'undefined') {
-  var currentScript = window.document.currentScript
-  if (true) {
-    var getCurrentScript = __webpack_require__("8875")
-    currentScript = getCurrentScript()
-
-    // for backward compatibility, because previously we directly included the polyfill
-    if (!('currentScript' in document)) {
-      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
-    }
-  }
-
-  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
-  if (src) {
-    __webpack_require__.p = src[1] // eslint-disable-line
-  }
-}
-
-// Indicate to webpack that this file can be concatenated
-/* harmony default export */ var setPublicPath = (null);
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.find.js
-var es_array_find = __webpack_require__("7db0");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
-var es_array_for_each = __webpack_require__("4160");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
-var es_object_keys = __webpack_require__("b64b");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
-var web_dom_collections_for_each = __webpack_require__("159b");
-
-// CONCATENATED MODULE: ./src/store/index.js
-
-
-
-
-// initial state
-var state = {
-  room: {},
-  // room information
-  users: [],
-  // information of users in the room
-  accessUserId: null,
-  // information of user who play in this window
-  appState: {}
-}; // mutations
-
-var mutations = {
-  setRoom: function setRoom(state, room) {
-    state.room = room;
-  },
-  setUsers: function setUsers(state, users) {
-    state.users = users;
-  },
-  setAccessUserId: function setAccessUserId(state, userId) {
-    state.accessUserId = userId;
-  },
-  setAppState: function setAppState(state, appState) {
-    state.appState = appState;
-  }
-};
-var actions = {
-  assignState: function assignState(_ref, obj) {
-    var state = _ref.state,
-        dispatch = _ref.dispatch;
-    var appState = state.appState;
-    Object.keys(obj).forEach(function (key) {
-      appState[key] = obj[key];
-    });
-    dispatch("replaceState", appState);
-  },
-  deleteState: function deleteState(_ref2) {
-    var dispatch = _ref2.dispatch;
-    dispatch("replaceState", {});
-  },
-  replaceState: function replaceState(_ref3, appState) {
-    var commit = _ref3.commit;
-    commit("setAppState", appState);
-    window.parent.postMessage({
-      appState: appState
-    }, document.referrer);
-  }
-};
-var getters = {
-  room: function room(state) {
-    return state.room;
-  },
-  users: function users(state) {
-    return state.users;
-  },
-  appState: function appState(state) {
-    return state.appState;
-  },
-  accessUser: function accessUser(state) {
-    return state.users.find(function (user) {
-      return user.id === state.accessUserId;
-    });
-  }
-};
-/* harmony default export */ var store = ({
-  namespaced: true,
-  state: state,
-  mutations: mutations,
-  actions: actions,
-  getters: getters
-});
-// CONCATENATED MODULE: ./src/main.js
- // Vuex toasts module
-
-/* harmony default export */ var main = ({
-  install: function install(Vue, options) {
-    if (!options.store) {
-      throw new Error("Please provide vuex store.");
-    } // Register vuex module
-
-
-    options.store.registerModule("whimClient", store); // wh.im本体との通信を開始
-
-    window.parent.postMessage("connect", document.referrer); // wh.imから room / users情報が送られてきたら登録
-
-    window.addEventListener("message", function (event) {
-      if (event.data.room) {
-        options.store.commit("whimClient/setRoom", event.data.room);
-      }
-
-      if (event.data.accessUserId) {
-        options.store.commit("whimClient/setAccessUserId", event.data.accessUserId);
-      }
-
-      if (event.data.users) {
-        options.store.commit("whimClient/setUsers", event.data.users);
-      }
-
-      if (event.data.appState) {
-        options.store.commit("whimClient/setAppState", event.data.appState);
-      }
-    }, false);
-    var prototypeWhim = {
-      assignState: function assignState(obj) {
-        return options.store.dispatch("whimClient/assignState", obj);
-      },
-      replaceState: function replaceState(obj) {
-        return options.store.dispatch("whimClient/replaceState", obj);
-      },
-      deleteState: function deleteState() {
-        return options.store.dispatch("whimClient/deleteState");
-      }
-    };
-    Object.defineProperty(prototypeWhim, "users", {
-      enumberable: true,
-      get: function get() {
-        return options.store.getters["whimClient/users"];
-      }
-    });
-    Object.defineProperty(prototypeWhim, "accessUser", {
-      enumberable: true,
-      get: function get() {
-        return options.store.getters["whimClient/accessUser"];
-      }
-    });
-    Object.defineProperty(prototypeWhim, "room", {
-      enumberable: true,
-      get: function get() {
-        return options.store.getters["whimClient/room"];
-      }
-    });
-    Object.defineProperty(prototypeWhim, "state", {
-      enumberable: true,
-      get: function get() {
-        return options.store.getters["whimClient/appState"];
-      }
-    });
-    Vue.prototype.$whim = prototypeWhim;
-  }
-});
-// CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
-
-
-/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (main);
 
 
 

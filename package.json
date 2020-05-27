@@ -4,9 +4,10 @@
   "main": "dist/whim-client-vue.common.js",
   "license": "MIT",
   "scripts": {
-    "build": "vue-cli-service build --target lib --name whim-client-vue ./src/main.js"
+    "build": "tsc && vue-cli-service build --target lib --name whim-client-vue ./src/main.js"
   },
   "dependencies": {
+    "@types/vue": "^2.0.0",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vuex": "^3.1.3"
@@ -22,6 +23,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^1.19.1",
+    "typescript": "^3.9.3",
     "vue-template-compiler": "^2.6.11"
   }
 }
