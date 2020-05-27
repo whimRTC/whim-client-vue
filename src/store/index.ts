@@ -13,7 +13,7 @@ type State = {
   accessUserId: string | null,
   appState: { [s: string]: any },
 }
-type Dispatch = (prop: string, obj: object) => void;
+type Dispatch = (prop: string, obj: { [s: string]: any }) => void;
 
 // initial state
 const state: State = {
@@ -50,7 +50,7 @@ const actions = {
   deleteState({ dispatch }: {dispatch: Dispatch}) {
     dispatch("replaceState", {});
   },
-  replaceState({ commit }: {commit: Dispatch}, appState: object) {
+  replaceState({ commit }: {commit: Dispatch}, appState: { [s: string]: any }) {
     commit("setAppState", appState);
     window.parent.postMessage({ appState }, document.referrer);
   }
