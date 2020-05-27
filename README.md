@@ -1,4 +1,5 @@
 # whim-client-vue
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 ## 概要
 wh.im 上でゲームの開発が簡単にできます。Vue.js用です。
