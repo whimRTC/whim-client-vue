@@ -63,7 +63,7 @@ const getters = {
   },
 };
 // initial state
-export const state: State = {
+const state: State = {
   room: {}, // room information
   users: [], // information of users in the room
   accessUserId: null, // information of user who play in this window
