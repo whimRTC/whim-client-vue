@@ -18,7 +18,9 @@ jobs:
       if: steps.cache-modules.outputs.cache-hit != 'true'
       run: npm install
     - name: Build
-      run: npm run build
+      run: npm run build:lib
+    - name: Build
+      run: npm run build:type
     - name: Publish
       uses: mikeal/merge-release@master
       env:
