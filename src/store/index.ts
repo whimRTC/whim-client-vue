@@ -59,8 +59,8 @@ const getters = {
     return state.appState;
   },
   accessUser: (state: State) => {
-    return state.users.find(user => user.id === state.accessUserId);
-  },
+    return state.users.find(user => user.id === state.accessUserId) || {};
+  }, 
 };
 // initial state
 const state: State = {
