@@ -77,3 +77,10 @@ this.$whim.users;
 こちらに簡単なサンプルアプリを用意したので、参考に開発してください。
 
 - [じゃんけん](https://github.com/whimRTC/whim-janken)
+
+# 開発の仕方
+1. リポジトリをクローン
+2. yarn link
+3. appsで`yarn link whim-client-vue`
+4. 初回&ソースコード変更のたびにyarn build
+- これを自動watchする方法はありそう。
