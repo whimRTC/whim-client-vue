@@ -1,7 +1,7 @@
 import store from "./store"; // Vuex toasts module
 
 export default {
-  install(Vue, options) {
+  install(Vue: any, options: any): void {
     if (!options.store) {
       throw new Error("Please provide vuex store.");
     }
@@ -15,14 +15,14 @@ export default {
     // wh.imから room / users情報が送られてきたら登録
     window.addEventListener(
       "message",
-      event => {
+      (event) => {
         if (event.data.room) {
           options.store.commit("whimClient/setRoom", event.data.room);
         }
         if (event.data.accessUserId) {
           options.store.commit(
             "whimClient/setAccessUserId",
-            event.data.accessUserId
+            event.data.accessUserId,
           );
         }
         if (event.data.users) {
@@ -32,51 +32,51 @@ export default {
           options.store.commit("whimClient/setAppState", event.data.appState);
         }
       },
-      false
+      false,
     );
 
-    let prototypeWhim = {
-      assignState(obj) {
+    const prototypeWhim = {
+      assignState(obj: { [s: string]: any }) {
         return options.store.dispatch("whimClient/assignState", obj);
       },
 
-      replaceState(obj) {
+      replaceState(obj: { [s: string]: any }) {
         return options.store.dispatch("whimClient/replaceState", obj);
       },
 
       deleteState() {
         return options.store.dispatch("whimClient/deleteState");
-      }
+      },
     };
 
     Object.defineProperty(prototypeWhim, "users", {
       enumerable: true,
-      get: function() {
+      get: () => {
         return options.store.getters["whimClient/users"];
-      }
+      },
     });
 
     Object.defineProperty(prototypeWhim, "accessUser", {
       enumerable: true,
-      get: function() {
+      get: () => {
         return options.store.getters["whimClient/accessUser"];
-      }
+      },
     });
 
     Object.defineProperty(prototypeWhim, "room", {
       enumerable: true,
-      get: function() {
+      get: () => {
         return options.store.getters["whimClient/room"];
-      }
+      },
     });
 
     Object.defineProperty(prototypeWhim, "state", {
       enumerable: true,
-      get: function() {
+      get: () => {
         return options.store.getters["whimClient/appState"];
-      }
+      },
     });
 
     Vue.prototype.$whim = prototypeWhim;
-  }
+  },
 };
