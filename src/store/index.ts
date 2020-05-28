@@ -60,7 +60,7 @@ const getters = {
   },
   accessUser: (state: State) => {
     return state.users.find(user => user.id === state.accessUserId) || {};
-  }, 
+  },
 };
 // initial state
 const state: State = {
