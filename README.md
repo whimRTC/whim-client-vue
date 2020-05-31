@@ -81,7 +81,7 @@ this.$whim.users;
 
 # 開発の仕方
 1. リポジトリをクローン
-2. yarn link
+2. 本リポジトリで`yarn link`
 3. appsで`yarn link whim-client-vue`
 4. 初回&ソースコード変更のたびにyarn build
 - これを自動watchする方法はありそう。

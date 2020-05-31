@@ -1,3 +1,4 @@
+import "@/assets/global.scss";
 import Vuex from "vuex";
 import whimStore from "./store"; // Vuex toasts module
 
@@ -7,14 +8,13 @@ export default {
     if (!store) {
       Vue.use(Vuex);
       store = new Vuex.Store({});
-      // throw new Error("Please rovide vuex store.");
     }
 
     // Register vuex module
     store.registerModule("whimClient", whimStore);
 
-    // wh.im本体との通信を開始
-    window.parent.postMessage("connect", document.referrer);
+    // set Environment Variable
+    store.commit("whimClient/setEnvironment", options?.environment);
 
     // wh.imから room / users情報が送られてきたら登録
     window.addEventListener(
@@ -38,6 +38,16 @@ export default {
       },
       false,
     );
+
+    // wh.im本体との通信を開始
+    let targetOrigin;
+    if (options?.environment === "staging") {
+      targetOrigin = "https://stg.wh.im";
+    } else {
+      targetOrigin = "https://wh.im";
+    }
+
+    window.parent.postMessage("connect", targetOrigin);
 
     const prototypeWhim = {
       assignState(obj: { [s: string]: any }) {
@@ -82,5 +92,23 @@ export default {
     });
 
     Vue.prototype.$whim = prototypeWhim;
+
+    Vue.mixin({
+      computed: {
+        whimUserWindowClass() {
+          return (user: any): string[] => {
+            let windowRatio;
+            if (window.innerWidth / window.innerHeight > 1) {
+              windowRatio = "landscape";
+            } else {
+              windowRatio = "portrait";
+            }
+
+            // @ts-ignore because of `this`
+            return ["user-window", `${windowRatio}-${this.$whim.users.length}`, `position-${user.positionNumber}`];
+          };
+        },
+      },
+    });
   },
 };
