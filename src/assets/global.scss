@@ -60,7 +60,7 @@
     }
   }
 
-  &.landscape-6 {
+  &.landscape-5, &.landscape-6 {
     width: calc(100% / 3);
     height: 50%;
     &.position-1 {
@@ -89,7 +89,7 @@
     }
   }
 
-  &.landscape-8 {
+  &.landscape-7, &.landscape-8 {
     width: 25%;
     height: 50%;
     &.position-1 {
@@ -148,7 +148,7 @@
     }
   }
 
-  &.portrait-4 {
+  &.portrait-3, &.portrait-4 {
     width: 50%;
     height: 50%;
     &.position-1 {
@@ -168,7 +168,8 @@
       left: 50%;
     }
   }
-  &.portrait-6 {
+
+  &.portrait-5, &.portrait-6 {
     width: 50%;
     height: calc(100% / 3);
     &.position-1 {
@@ -197,7 +198,7 @@
     }
   }
 
-  &.portrait-8 {
+  &.portrait-7, &.portrait-8 {
     width: 50%;
     height: 25%;
     &.position-1 {
