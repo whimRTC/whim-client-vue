@@ -5,16 +5,16 @@ import whimStore from "./store"; // Vuex toasts module
 const positionClass = {
   landscape: {
     1: {
-      1: ["v-center", "h-center"],
+      1: ["top", "bottom", "left", "right"],
     },
     2: {
-      1: ["v-center", "left"],
-      2: ["v-center", "right"],
+      1: ["top", "bottom", "left"],
+      2: ["top", "bottom", "right"],
     },
     3: {
-      1: ["v-center", "left"],
-      2: ["v-center", "h-center"],
-      3: ["v-center", "right"],
+      1: ["top", "bottom", "left"],
+      2: ["top", "bottom"],
+      3: ["top", "bottom", "right"],
     },
     4: {
       1: ["v-center", "left"],
@@ -59,11 +59,11 @@ const positionClass = {
   },
   portrait: {
     1: {
-      1: ["v-center", "h-center"],
+      1: ["top", "bottom", "left", "right"],
     },
     2: {
-      1: ["top", "h-center"],
-      2: ["bottom", "h-center"],
+      1: ["top", "left", "right"],
+      2: ["bottom", "left", "right"],
     },
     3: {
       1: ["top", "left"],
