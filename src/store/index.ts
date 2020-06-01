@@ -12,6 +12,7 @@ interface State {
   users: User[];
   accessUserId: string | null;
   appState: { [s: string]: any };
+  targetOrigin: string;
 }
 type ConnFunc = (prop: string, obj: { [s: string]: any }) => void;
 
@@ -29,6 +30,13 @@ const mutations = {
   setAppState(state: State, appState: { [s: string]: any }) {
     state.appState = appState;
   },
+  setEnvironment(state: State, environment: string | null) {
+    if (environment === "staging") {
+      state.targetOrigin = "https://stg.wh.im";
+    } else {
+      state.targetOrigin = "https://wh.im";
+    }
+  },
 };
 
 const actions = {
@@ -42,9 +50,9 @@ const actions = {
   deleteState({ dispatch }: {dispatch: ConnFunc}) {
     dispatch("replaceState", {});
   },
-  replaceState({ commit }: {commit: ConnFunc}, appState: { [s: string]: any }) {
+  replaceState({ state, commit }: {state: State, commit: ConnFunc}, appState: { [s: string]: any }) {
     commit("setAppState", appState);
-    window.parent.postMessage({ appState }, document.referrer);
+    window.parent.postMessage({ appState }, state.targetOrigin);
   },
 };
 
@@ -68,6 +76,7 @@ const state: State = {
   users: [], // information of users in the room
   accessUserId: null, // information of user who play in this window
   appState: {},
+  targetOrigin: "https://wh.im",
 };
 
 export default {
