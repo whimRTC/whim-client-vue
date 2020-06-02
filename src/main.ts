@@ -125,8 +125,8 @@ export default {
     store.registerModule("whimClient", whimStore);
 
     // set Target Origin
-    if (options?.setTargetOrigin) {
-      store.commit("whimClient/setTargetOrigin", options?.setTargetOrigin);
+    if (options?.targetOrigin) {
+      store.commit("whimClient/setTargetOrigin", options?.targetOrigin);
     }
 
     // wh.imから room / users情報が送られてきたら登録
@@ -150,14 +150,7 @@ export default {
     );
 
     // wh.im本体との通信を開始
-    let targetOrigin;
-    if (options?.environment === "staging") {
-      targetOrigin = "https://stg.wh.im";
-    } else {
-      targetOrigin = "https://wh.im";
-    }
-
-    window.parent.postMessage("connect", targetOrigin);
+    window.parent.postMessage("connect", options?.targetOrigin || "https://wh.im");
 
     const prototypeWhim = {
       assignState(obj: { [s: string]: any }) {
