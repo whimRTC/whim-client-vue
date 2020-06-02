@@ -125,7 +125,7 @@ export default {
     store.registerModule("whimClient", whimStore);
 
     // set Target Origin
-    if(options?.setTargetOrigin){
+    if (options?.setTargetOrigin){
       store.commit("whimClient/setTargetOrigin", options?.setTargetOrigin);
     }
 
