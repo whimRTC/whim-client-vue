@@ -22,7 +22,7 @@ yarn-error.log*
 *.sln
 *.sw?
 
-# recomendations
+# recomendations 
 !.vscode/extensions.json
 
 dist/
