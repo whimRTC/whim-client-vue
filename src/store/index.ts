@@ -30,12 +30,8 @@ const mutations = {
   setAppState(state: State, appState: { [s: string]: any }) {
     state.appState = appState;
   },
-  setEnvironment(state: State, environment: string | null) {
-    if (environment === "staging") {
-      state.targetOrigin = "https://stg.wh.im";
-    } else {
-      state.targetOrigin = "https://wh.im";
-    }
+  setTargetOrigin(state: State, targetOrigin: string) {
+    state.targetOrigin = targetOrigin;
   },
 };
 

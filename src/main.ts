@@ -124,8 +124,10 @@ export default {
     // Register vuex module
     store.registerModule("whimClient", whimStore);
 
-    // set Environment Variable
-    store.commit("whimClient/setEnvironment", options?.environment);
+    // set Target Origin
+    if(options?.setTargetOrigin){
+      store.commit("whimClient/setTargetOrigin", options?.setTargetOrigin);
+    }
 
     // wh.imから room / users情報が送られてきたら登録
     window.addEventListener(
