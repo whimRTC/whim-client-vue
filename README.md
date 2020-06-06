@@ -1,83 +1,68 @@
 # whim-client-vue
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
-## 概要
+# 概要
 wh.im 上でゲームの開発が簡単にできます。Vue.js用です。
 
-## インストール
-以下のコマンドでvue.jsのプロジェクトに追加します。
+# whim-clientのインストール
+
+以下のコマンドでVue.jsのプロジェクトに追加します。
 
 ```bash
 $ npm install --save whim-client-vue
-or
+# or
 $ yarn add whim-client-vue
 ```
 
-## 使い方
-1. whim-client-vueを読み込みます。
+# main.jsでのwhim-clientの読み込み
 
+main.jsを以下のような構成にします。
+
+```js
+import Vue from "vue";
+import App from "./App.vue";
+import whimClientVue from "whim-client-vue";
+import "whim-client-vue/dist/whim-client-vue.css";
+
+Vue.config.productionTip = false;
+Vue.use(whimClientVue);
+
+new Vue({
+  render: h => h(App)
+}).$mount("#app");
+```
+
+## 1. `whim-client-vue`の読み込み
 ```js
 import whimClientVue from "whim-client-vue";
+import "whim-client-vue/dist/whim-client-vue.css";
 ```
 
-2. Vue.use でライブラリを読み込みます。このとき`Store`オブジェクトを渡してください。
-whimClientVueはwhimClientというネームスペースでデータを保存します。
-
+## 2. vueにライブラリの登録
 ```js
-Vue.use(whimClientVue, { store })
+Vue.use(whimClientVue);
 ```
 
-3. `this.$whim`でvue上からwhimのデータの読み出し/書き込みができるようになります。
+# whim-clientの使用例
+`this.$whim`でVue.js上からwhimのデータの読み出し/書き込みができるようになります。
+
 ```js
+// user一覧の取り出し
 this.$whim.users;
+
+// stateの取り出し
+this.$whim.state;
+
+// stateの書き込み
+this.$whim.setState("phase", "start")
 ```
 
-## props
+より詳細には[API一覧](https://docs.wh.im/developer/whim-client-vue-api)をご覧ください。
 
-型に関する情報は下部に記載しています。
-
-| コード           | 型     | 説明                           |
-| ---------------- | ------ | ------------------------------ |
-| $whim.users      | [User] | ルームに入っているユーザー一覧 |
-| $whim.room       | Room   | Room Object                    |
-| $whim.accessUser | User   | 現在アクセスしているUser       |
-| $whim.state      | State  | ゲームの状態                   |
-
-### Room型
-
-| key  | 型                                           | 詳細                                         |
-| ---- | -------------------------------------------- | -------------------------------------------- |
-| id   | そのroomのユニークなid。英数字で構成される。 | そのroomのユニークなid。英数字で構成される。 |
-
-### User型
-
-| key           | 型      | 詳細                                                         |
-| ------------- | ------- | ------------------------------------------------------------ |
-| id            | String  | ユーザーのユニークなID。                                     |
-| name          | String  | ユーザーが設定した名前。                                     |
-| timestamp     | Date    | ユーザがルームに参加した時間                                 |
-| postionNumber | Integer | ユーザーが画面上で位置している場所。左上からZ字上に1,2,3,4と割り振られる |
-
-### State型
-
-この型はゲームに必要な情報に応じて任意に使用可能です。
-
-この型は、そのroomに参加しているユーザーに対して常に同期されます。
-
-## functions
-
-ここでは ゲーム情報を変更し、そのルームに入っている各ユーザーに同期するためのAPIを提供しています。
-
-| コード                     | 引数   | 説明                                                         |
-| -------------------------- | ------ | ------------------------------------------------------------ |
-| $whim.assignState(Object)  | Object | ゲーム情報を追記更新、  <br />存在しないキーの場合：追記 <br />存在するキーの場合：更新 |
-| $whim.replaceState(Object) | Object | ゲーム情報を渡されたObjectにすべて変える                     |
-| $whim.deleteState          |        | ゲーム情報を空にする                                         |
-
-## サンプルアプリ
-こちらに簡単なサンプルアプリを用意したので、参考に開発してください。
-
+# サンプルアプリ
+サンプルアプリをいくつかご用意しました。参考にしてください。
 - [じゃんけん](https://github.com/whimRTC/whim-janken)
+- 追加予定
 
 # 開発の仕方
 1. リポジトリをクローン
