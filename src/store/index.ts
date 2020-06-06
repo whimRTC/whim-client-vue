@@ -50,6 +50,18 @@ const actions = {
     commit("setAppState", appState);
     window.parent.postMessage({ appState }, state.targetOrigin);
   },
+  setState({ state }: {state: State}, { ref, data }: { ref: string, data: any }) {
+    window.parent.postMessage({ state: { ref, operator: "set", data } }, state.targetOrigin);
+  },
+  updateState({ state }: {state: State},  data: any ) {
+    window.parent.postMessage({ state: { operator: "update", data } }, state.targetOrigin);
+  },
+  removeState({ state }: {state: State}, ref: string) {
+    window.parent.postMessage({ state: { ref, operator: "remove" } }, state.targetOrigin);
+  },
+  resetState({ state }: {state: State}) {
+    window.parent.postMessage({ state: { operator: "reset" } }, state.targetOrigin);
+  },
 };
 
 const getters = {

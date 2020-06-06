@@ -164,6 +164,22 @@ export default {
       deleteState() {
         return store.dispatch("whimClient/deleteState");
       },
+
+      setState( ref: string, data: any )  {
+        return store.dispatch("whimClient/setState", {ref, data});
+      },
+
+      updateState( data: any )  {
+        return store.dispatch("whimClient/updateState", data);
+      },
+
+      removeState( ref: string )  {
+        return store.dispatch("whimClient/removeState", ref);
+      },
+
+      resetState()  {
+        return store.dispatch("whimClient/resetState");
+      },
     };
 
     Object.defineProperty(prototypeWhim, "users", {
