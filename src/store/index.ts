@@ -36,6 +36,7 @@ const mutations = {
 };
 
 const actions = {
+  // 削除予定
   assignState({ state, dispatch }: {state: State, dispatch: ConnFunc}, obj: { [s: string]: any }) {
     const appState = state.appState;
     Object.keys(obj).forEach(key => {
@@ -43,9 +44,11 @@ const actions = {
     });
     dispatch("replaceState", appState);
   },
+  // 削除予定
   deleteState({ dispatch }: {dispatch: ConnFunc}) {
     dispatch("replaceState", {});
   },
+  // 削除予定
   replaceState({ state, commit }: {state: State, commit: ConnFunc}, appState: { [s: string]: any }) {
     commit("setAppState", appState);
     window.parent.postMessage({ appState }, state.targetOrigin);
