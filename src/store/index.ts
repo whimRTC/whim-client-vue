@@ -20,7 +20,7 @@ type ConnFunc = (prop: string, obj: { [s: string]: any }) => void;
 
 interface PathValue {
   // eslint-disable-next-line
-  [key: string]: any; // <-この行を追加!
+  [key: string]: any;
 }
 
 // eslint-disable-next-line
