@@ -24,5 +24,6 @@ yarn-error.log*
 
 # recomendations 
 !.vscode/extensions.json
+!.vscode/settings.json
 
 dist/
