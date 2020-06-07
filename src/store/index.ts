@@ -11,74 +11,160 @@ interface State {
   room: Room;
   users: User[];
   accessUserId: string | null;
+  // eslint-disable-next-line
   appState: { [s: string]: any };
   targetOrigin: string;
 }
+// eslint-disable-next-line
 type ConnFunc = (prop: string, obj: { [s: string]: any }) => void;
+
+interface PathValue {
+  // eslint-disable-next-line
+  [key: string]: any; // <-この行を追加!
+}
+
+// eslint-disable-next-line
+function mergeDeeply(target: any, source: any) {
+  // eslint-disable-next-line
+  const isObject = (obj: any) =>
+    obj && typeof obj === "object" && !Array.isArray(obj);
+  const result = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    for (const [sourceKey, sourceValue] of Object.entries(source)) {
+      const targetValue = target[sourceKey];
+      if (
+        isObject(sourceValue) &&
+        Object.prototype.hasOwnProperty.call(target, sourceKey)
+      ) {
+        result[sourceKey] = mergeDeeply(targetValue, sourceValue);
+      } else {
+        Object.assign(result, { [sourceKey]: sourceValue });
+      }
+    }
+  }
+  return result;
+}
+
+// eslint-disable-next-line
+function mappingPathValue(source: any) {
+  // eslint-disable-next-line
+  const isObject = (obj: any) =>
+    obj && typeof obj === "object" && !Array.isArray(obj);
+  const result: PathValue = {};
+  for (const [key, value] of Object.entries(source)) {
+    if (isObject(value)) {
+      const res = mappingPathValue(value);
+      for (const [resKey, resValue] of Object.entries(res)) {
+        result[key + "/" + resKey] = resValue;
+      }
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
 
 // mutations
 const mutations = {
-  setRoom(state: State, room: Room) {
+  setRoom(state: State, room: Room): void {
     state.room = room;
   },
-  setUsers(state: State, users: User[]) {
+  setUsers(state: State, users: User[]): void {
     state.users = users;
   },
-  setAccessUserId(state: State, userId: string) {
+  setAccessUserId(state: State, userId: string): void {
     state.accessUserId = userId;
   },
-  setAppState(state: State, appState: { [s: string]: any }) {
+  // eslint-disable-next-line
+  setAppState(state: State, appState: { [s: string]: any }): void {
     state.appState = appState;
   },
-  setTargetOrigin(state: State, targetOrigin: string) {
+  setTargetOrigin(state: State, targetOrigin: string): void {
     state.targetOrigin = targetOrigin;
   },
 };
 
 const actions = {
-  // 削除予定
-  assignState({ state, dispatch }: {state: State, dispatch: ConnFunc}, obj: { [s: string]: any }) {
-    const appState = state.appState;
-    Object.keys(obj).forEach(key => {
-      appState[key] = obj[key];
-    });
-    dispatch("replaceState", appState);
+  assignState(
+    { state, commit }: { state: State; commit: ConnFunc },
+    // eslint-disable-next-line
+    data: any
+  ): void {
+    const target = state.appState;
+    commit("setAppState", mergeDeeply(target, data));
+    const updates = mappingPathValue(data);
+    window.parent.postMessage(
+      { state: { operator: "update", data: updates } },
+      state.targetOrigin
+    );
   },
   // 削除予定
-  deleteState({ dispatch }: {dispatch: ConnFunc}) {
+  deleteState({ dispatch }: { dispatch: ConnFunc }): void {
     dispatch("replaceState", {});
   },
   // 削除予定
-  replaceState({ state, commit }: {state: State, commit: ConnFunc}, appState: { [s: string]: any }) {
+  replaceState(
+    { state, commit }: { state: State; commit: ConnFunc },
+    // eslint-disable-next-line
+    appState: { [s: string]: any }
+  ): void {
     commit("setAppState", appState);
     window.parent.postMessage({ appState }, state.targetOrigin);
   },
-  setState({ state }: {state: State}, { ref, data }: { ref: string, data: any }) {
-    window.parent.postMessage({ state: { ref, operator: "set", data } }, state.targetOrigin);
+  // 削除予定
+  setState(
+    { state }: { state: State },
+    // eslint-disable-next-line
+    { ref, data }: { ref: string; data: any }
+  ): void {
+    window.parent.postMessage(
+      { state: { ref, operator: "set", data } },
+      state.targetOrigin
+    );
   },
-  updateState({ state }: {state: State},  data: any ) {
-    window.parent.postMessage({ state: { operator: "update", data } }, state.targetOrigin);
+  // 削除予定
+  // eslint-disable-next-line
+  updateState({ state }: { state: State }, data: any): void {
+    window.parent.postMessage(
+      { state: { operator: "update", data } },
+      state.targetOrigin
+    );
   },
-  removeState({ state }: {state: State}, ref: string) {
-    window.parent.postMessage({ state: { ref, operator: "remove" } }, state.targetOrigin);
+  // 削除予定
+  removeState({ state }: { state: State }, ref: string): void {
+    window.parent.postMessage(
+      { state: { ref, operator: "remove" } },
+      state.targetOrigin
+    );
   },
-  resetState({ state }: {state: State}) {
-    window.parent.postMessage({ state: { operator: "reset" } }, state.targetOrigin);
+  resetState(
+    { state, commit }: { state: State; commit: ConnFunc },
+    // eslint-disable-next-line
+    data: any
+  ): void {
+    commit("setAppState", data);
+    window.parent.postMessage(
+      { state: { operator: "reset", data } },
+      state.targetOrigin
+    );
   },
 };
 
 const getters = {
-  room: (state: State) => {
+  room: (state: State): Room => {
     return state.room;
   },
-  users: (state: State) => {
+  users: (state: State): User[] => {
     return state.users;
   },
-  appState: (state: State) => {
+  // eslint-disable-next-line
+  appState: (state: State): { [key: string]: any } => {
     return state.appState;
   },
-  accessUser: (state: State) => {
-    return state.users.find(user => user.id === state.accessUserId) || {};
+  // eslint-disable-next-line
+  accessUser: (state: State): User | {} => {
+    return state.users.find((user) => user.id === state.accessUserId) || {};
   },
 };
 // initial state

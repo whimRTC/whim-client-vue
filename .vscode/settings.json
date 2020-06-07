@@ -1,0 +1,15 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "eslint.packageManager": "yarn",
+  "eslint.validate": [
+    "typescript",
+    "vue"
+  ]
+}

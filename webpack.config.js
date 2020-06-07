@@ -10,7 +10,7 @@ module.exports = {
     //  出力ファイルのディレクトリ名
     path: `${__dirname}/dist`,
     // 出力ファイル名
-    filename: "main.js"
+    filename: "main.js",
   },
   module: {
     rules: [
@@ -18,16 +18,16 @@ module.exports = {
         // 拡張子 .ts の場合
         test: /\.ts$/,
         // TypeScript をコンパイルする
-        use: "ts-loader"
-      }
-    ]
+        use: "ts-loader",
+      },
+    ],
   },
   // import 文で .ts ファイルを解決するため
   resolve: {
     extensions: [".ts"],
     // Webpackで利用するときの設定
     alias: {
-      vue: "vue/dist/vue.js"
-    }
-  }
+      vue: "vue/dist/vue.js",
+    },
+  },
 };
