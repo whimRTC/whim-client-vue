@@ -53,8 +53,11 @@ this.$whim.users;
 // stateの取り出し
 this.$whim.state;
 
-// stateの書き込み
-this.$whim.setState("phase", "start")
+// stateの差分更新
+this.$whim.assignState({point: 2})
+
+// stateの全更新
+this.$whim.resetState({phase: "start"})
 ```
 
 より詳細には[API一覧](https://docs.wh.im/developer/whim-client-vue-api)をご覧ください。
