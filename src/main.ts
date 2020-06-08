@@ -186,8 +186,9 @@ export default {
         return store.dispatch("whimClient/removeState", ref);
       },
 
-      resetState() {
-        return store.dispatch("whimClient/resetState");
+      // eslint-disable-next-line
+      resetState(data: any = {}) {
+        return store.dispatch("whimClient/resetState", data);
       },
     };
 
