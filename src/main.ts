@@ -126,6 +126,25 @@ export default {
     // Register vuex module
     store.registerModule("whimClient", whimStore);
 
+    if (window.innerWidth / window.innerHeight < 1) {
+      store.commit("whimClient/setOrientation", "portrait");
+    } else {
+      store.commit("whimClient/setOrientation", "landscape");
+    }
+
+    // eslint-disable-next-line
+    const setOrientation = function (e: any) {
+      setTimeout(() => {
+        if (window.innerWidth / window.innerHeight < 1) {
+          store.commit("whimClient/setOrientation", "portrait");
+        } else {
+          store.commit("whimClient/setOrientation", "landscape");
+        }
+      }, 50);
+    };
+
+    window.addEventListener("resize", setOrientation);
+
     // set Target Origin
     if (options?.targetOrigin) {
       store.commit("whimClient/setTargetOrigin", options?.targetOrigin);
@@ -220,6 +239,13 @@ export default {
       },
     });
 
+    Object.defineProperty(prototypeWhim, "orientation", {
+      enumerable: true,
+      get: () => {
+        return store.state.whimClient.orientation;
+      },
+    });
+
     // @ts-ignore
     Vue.prototype.$whim = prototypeWhim;
 
@@ -227,37 +253,28 @@ export default {
     Vue.mixin({
       computed: {
         whimUserWindowClass() {
+          // @ts-ignore because of `this`
+          const orientation = this.$whim.orientation;
           // eslint-disable-next-line
           return (user: any): string[] => {
-            let windowRatio;
-            if (window.innerWidth / window.innerHeight > 1) {
-              windowRatio = "landscape";
-            } else {
-              windowRatio = "portrait";
-            }
-
             return [
               "user-window",
               // @ts-ignore because of `this`
-              `${windowRatio}-${this.$whim.users.length}`,
+              `${orientation}-${this.$whim.users.length}`,
               `position-${user.positionNumber}`,
             ];
           };
         },
         whimPositionClass() {
+          // @ts-ignore because of `this`
+          const orientation = this.$whim.orientation;
           // eslint-disable-next-line
           return (user: any): string[] => {
-            let windowRatio;
-            if (window.innerWidth / window.innerHeight > 1) {
-              windowRatio = "landscape";
-            } else {
-              windowRatio = "portrait";
-            }
-
             // @ts-ignore because of `this`
-            return positionClass[windowRatio][this.$whim.users.length][
-              user.positionNumber
-            ];
+            return positionClass[orientation][
+              // @ts-ignore because of `this`
+              this.$whim.users.length
+            ][user.positionNumber];
           };
         },
       },
