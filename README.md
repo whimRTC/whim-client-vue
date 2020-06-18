@@ -1,4 +1,5 @@
 # whim-client-vue
+[![npm version](https://badge.fury.io/js/whim-client-vue.svg)](https://badge.fury.io/js/whim-client-vue)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 # 概要
