@@ -14,6 +14,7 @@ interface State {
   // eslint-disable-next-line
   appState: { [s: string]: any };
   targetOrigin: string;
+  orientation: string;
 }
 // eslint-disable-next-line
 type ConnFunc = (prop: string, obj: { [s: string]: any }) => void;
@@ -82,6 +83,9 @@ const mutations = {
   },
   setTargetOrigin(state: State, targetOrigin: string): void {
     state.targetOrigin = targetOrigin;
+  },
+  setOrientation(state: State, orientation: string): void {
+    state.orientation = orientation;
   },
 };
 
@@ -174,6 +178,7 @@ const state: State = {
   accessUserId: null, // information of user who play in this window
   appState: {},
   targetOrigin: "https://wh.im",
+  orientation: "landscape",
 };
 
 export default {
