@@ -60,7 +60,7 @@
     }
   }
 
-  &.landscape-5, &.landscape-6 {
+  &.landscape-5 {
     width: calc(100% / 3);
     height: 50%;
     &.position-1 {
@@ -77,11 +77,11 @@
     }
     &.position-4 {
       top: 50%;
-      left: 0%;
+      left: calc(100% / 3);
     }
     &.position-5 {
       top: 50%;
-      left: calc(100% / 3);
+      left: 0%;
     }
     &.position-6 {
       top: 50%;
@@ -89,7 +89,36 @@
     }
   }
 
-  &.landscape-7, &.landscape-8 {
+  &.landscape-6 {
+    width: calc(100% / 3);
+    height: 50%;
+    &.position-1 {
+      top: 0%;
+      left: 0%;
+    }
+    &.position-2 {
+      top: 0%;
+      left: calc(100% / 3);
+    }
+    &.position-3 {
+      top: 0%;
+      left: calc(200% / 3);
+    }
+    &.position-4 {
+      top: 50%;
+      left: calc(200% / 3);
+    }
+    &.position-5 {
+      top: 50%;
+      left: calc(100% / 3);
+    }
+    &.position-6 {
+      top: 50%;
+      left: 0%;
+    }
+  }
+
+  &.landscape-7 {
     width: 25%;
     height: 50%;
     &.position-1 {
@@ -110,7 +139,7 @@
     }
     &.position-5 {
       top: 50%;
-      left: 0%;
+      left: 50%;
     }
     &.position-6 {
       top: 50%;
@@ -118,11 +147,48 @@
     }
     &.position-7 {
       top: 50%;
-      left: 50%;
+      left: 0%;
     }
     &.position-8 {
       top: 50%;
       left: 75%;
+    }
+  }
+
+  &.landscape-8 {
+    width: 25%;
+    height: 50%;
+    &.position-1 {
+      top: 0%;
+      left: 0%;
+    }
+    &.position-2 {
+      top: 0%;
+      left: 25%;
+    }
+    &.position-3 {
+      top: 0%;
+      left: 50%;
+    }
+    &.position-4 {
+      top: 0%;
+      left: 75%;
+    }
+    &.position-5 {
+      top: 50%;
+      left: 75%;
+    }
+    &.position-6 {
+      top: 50%;
+      left: 50%;
+    }
+    &.position-7 {
+      top: 50%;
+      left: 25%;
+    }
+    &.position-8 {
+      top: 50%;
+      left: 0%;
     }
   }
 
@@ -148,7 +214,7 @@
     }
   }
 
-  &.portrait-3, &.portrait-4 {
+  &.portrait-3 {
     width: 50%;
     height: 50%;
     &.position-1 {
@@ -169,7 +235,28 @@
     }
   }
 
-  &.portrait-5, &.portrait-6 {
+  &.portrait-4 {
+    width: 50%;
+    height: 50%;
+    &.position-1 {
+      top: 0%;
+      left: 0%;
+    }
+    &.position-2 {
+      top: 0%;
+      left: 50%;
+    }
+    &.position-3 {
+      top: 50%;
+      left: 50%;
+    }
+    &.position-4 {
+      top: 50%;
+      left: 0%;
+    }
+  }
+
+  &.portrait-5 {
     width: 50%;
     height: calc(100% / 3);
     &.position-1 {
@@ -182,14 +269,14 @@
     }
     &.position-3 {
       top: calc(100% / 3);
-      left: 0%;
-    }
-    &.position-4 {
-      top: calc(100% / 3);
       left: 50%;
     }
-    &.position-5 {
+    &.position-4 {
       top: calc(200% / 3);
+      left: 0%;
+    }
+    &.position-5 {
+      top: calc(100% / 3);
       left: 0%;
     }
     &.position-6 {
@@ -198,7 +285,36 @@
     }
   }
 
-  &.portrait-7, &.portrait-8 {
+  &.portrait-6 {
+    width: 50%;
+    height: calc(100% / 3);
+    &.position-1 {
+      top: 0%;
+      left: 0%;
+    }
+    &.position-2 {
+      top: 0%;
+      left: 50%;
+    }
+    &.position-3 {
+      top: calc(100% / 3);
+      left: 50%;
+    }
+    &.position-4 {
+      top: calc(200% / 3);
+      left: 50%;
+    }
+    &.position-5 {
+      top: calc(200% / 3);
+      left: 0%;
+    }
+    &.position-6 {
+      top: calc(100% / 3);
+      left: 0%;
+    }
+  }
+
+  &.portrait-7 {
     width: 50%;
     height: 25%;
     &.position-1 {
@@ -211,27 +327,64 @@
     }
     &.position-3 {
       top: 25%;
-      left: 0%;
+      left: 50%;
     }
     &.position-4 {
-      top: 25%;
+      top: 75%;
       left: 50%;
     }
     &.position-5 {
-      top: 75%;
+      top: 100%;
       left: 0%;
     }
     &.position-6 {
       top: 75%;
-      left: 50%;
+      left: 0%;
     }
     &.position-7 {
-      top: 100%;
+      top: 25%;
       left: 0%;
     }
     &.position-8 {
       top: 100%;
       left: 50%;
+    }
+  }
+  
+  &.portrait-8 {
+    width: 50%;
+    height: 25%;
+    &.position-1 {
+      top: 0%;
+      left: 0%;
+    }
+    &.position-2 {
+      top: 0%;
+      left: 50%;
+    }
+    &.position-3 {
+      top: 25%;
+      left: 50%;
+    }
+    &.position-4 {
+      top: 75%;
+      left: 50%;
+    }
+    &.position-5 {
+      top: 100%;
+      left: 50%;
+    }
+    &.position-6 {
+      top: 100%;
+      left: 0%;
+    }
+    &.position-7 {
+      top: 75%;
+      left: 0%;
+    }
+    &.position-8 {
+      top: 25%;
+      left: 0%;
     }
   }
 }
