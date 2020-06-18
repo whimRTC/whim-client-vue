@@ -1,5 +1,6 @@
 # whim-client-vue
 [![npm version](https://badge.fury.io/js/whim-client-vue.svg)](https://badge.fury.io/js/whim-client-vue)
+![github workflow](https://github.com/whimRTC/whim-client-vue/workflows/Release/badge.svg)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 # 概要
