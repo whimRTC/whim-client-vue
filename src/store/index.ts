@@ -1,3 +1,5 @@
+import mergeDeeply from "../utils/merge_deeply";
+
 interface Room {
   id?: string;
 }
@@ -22,28 +24,6 @@ type ConnFunc = (prop: string, obj: { [s: string]: any }) => void;
 interface PathValue {
   // eslint-disable-next-line
   [key: string]: any;
-}
-
-// eslint-disable-next-line
-function mergeDeeply(target: any, source: any) {
-  // eslint-disable-next-line
-  const isObject = (obj: any) =>
-    obj && typeof obj === "object" && !Array.isArray(obj);
-  const result = Object.assign({}, target);
-  if (isObject(target) && isObject(source)) {
-    for (const [sourceKey, sourceValue] of Object.entries(source)) {
-      const targetValue = target[sourceKey];
-      if (
-        isObject(sourceValue) &&
-        Object.prototype.hasOwnProperty.call(target, sourceKey)
-      ) {
-        result[sourceKey] = mergeDeeply(targetValue, sourceValue);
-      } else {
-        Object.assign(result, { [sourceKey]: sourceValue });
-      }
-    }
-  }
-  return result;
 }
 
 // eslint-disable-next-line
