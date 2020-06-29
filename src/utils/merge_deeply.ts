@@ -12,13 +12,10 @@ function mergeDeeply(target: any, source: any): any {
 
       if (
         isObject(sourceValue) &&
+        isObject(targetValue) &&
         Object.prototype.hasOwnProperty.call(target, sourceKey)
       ) {
-        if (isObject(targetValue)) {
-          resultArray[sourceKey] = mergeDeeply(targetValue, sourceValue);
-        } else {
-          resultArray[sourceKey] = sourceValue;
-        }
+        resultArray[sourceKey] = mergeDeeply(targetValue, sourceValue);
       } else {
         resultArray[sourceKey] = sourceValue;
       }
