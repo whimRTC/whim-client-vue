@@ -83,6 +83,19 @@ const actions = {
       state.targetOrigin
     );
   },
+  resetState(
+    { state, commit }: { state: State; commit: ConnFunc },
+    // eslint-disable-next-line
+    data: any
+  ): void {
+    commit("setAppState", data);
+    window.parent.postMessage(
+      { state: { operator: "reset", data } },
+      state.targetOrigin
+    );
+  },
+
+  // 以下 v1.3で削除
   // 削除予定
   deleteState({ dispatch }: { dispatch: ConnFunc }): void {
     dispatch("replaceState", {});
@@ -91,7 +104,7 @@ const actions = {
   replaceState(
     { state, commit }: { state: State; commit: ConnFunc },
     // eslint-disable-next-line
-    appState: { [s: string]: any }
+      appState: { [s: string]: any }
   ): void {
     commit("setAppState", appState);
     window.parent.postMessage({ appState }, state.targetOrigin);
@@ -100,7 +113,7 @@ const actions = {
   setState(
     { state }: { state: State },
     // eslint-disable-next-line
-    { ref, data }: { ref: string; data: any }
+      { ref, data }: { ref: string; data: any }
   ): void {
     window.parent.postMessage(
       { state: { ref, operator: "set", data } },
@@ -109,7 +122,7 @@ const actions = {
   },
   // 削除予定
   // eslint-disable-next-line
-  updateState({ state }: { state: State }, data: any): void {
+    updateState({ state }: { state: State }, data: any): void {
     window.parent.postMessage(
       { state: { operator: "update", data } },
       state.targetOrigin
@@ -119,17 +132,6 @@ const actions = {
   removeState({ state }: { state: State }, ref: string): void {
     window.parent.postMessage(
       { state: { ref, operator: "remove" } },
-      state.targetOrigin
-    );
-  },
-  resetState(
-    { state, commit }: { state: State; commit: ConnFunc },
-    // eslint-disable-next-line
-    data: any
-  ): void {
-    commit("setAppState", data);
-    window.parent.postMessage(
-      { state: { operator: "reset", data } },
       state.targetOrigin
     );
   },

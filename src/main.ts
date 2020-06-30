@@ -1,121 +1,51 @@
 import "@/assets/global.scss";
 import Vuex from "vuex";
 import whimStore from "./store"; // Vuex toasts module
+import { Howl } from "howler";
+import positionClass from "./assets/positionClass";
 
-const positionClass = {
-  landscape: {
-    1: {
-      1: ["top", "bottom", "left", "right"],
-    },
-    2: {
-      1: ["top", "bottom", "left"],
-      2: ["top", "bottom", "right"],
-    },
-    3: {
-      1: ["top", "bottom", "left"],
-      2: ["top", "bottom"],
-      3: ["top", "bottom", "right"],
-    },
-    4: {
-      1: ["top", "bottom", "left"],
-      2: ["top", "bottom"],
-      3: ["top", "bottom"],
-      4: ["top", "bottom", "right"],
-    },
-    5: {
-      1: ["top", "left"],
-      2: ["top"],
-      3: ["top", "right"],
-      4: ["bottom"],
-      5: ["bottom", "left"],
-    },
-    6: {
-      1: ["top", "left"],
-      2: ["top"],
-      3: ["top", "right"],
-      4: ["bottom", "right"],
-      5: ["bottom"],
-      6: ["bottom", "left"],
-    },
-    7: {
-      1: ["top", "left"],
-      2: ["top"],
-      3: ["top"],
-      4: ["top", "right"],
-      5: ["bottom"],
-      6: ["bottom"],
-      7: ["bottom", "left"],
-    },
-    8: {
-      1: ["top", "left"],
-      2: ["top"],
-      3: ["top"],
-      4: ["top", "right"],
-      5: ["bottom", "right"],
-      6: ["bottom"],
-      7: ["bottom"],
-      8: ["bottom", "left"],
-    },
-  },
-  portrait: {
-    1: {
-      1: ["top", "bottom", "left", "right"],
-    },
-    2: {
-      1: ["top", "left", "right"],
-      2: ["bottom", "left", "right"],
-    },
-    3: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["bottom", "left"],
-    },
-    4: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["bottom", "right"],
-      4: ["bottom", "left"],
-    },
-    5: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["right"],
-      4: ["bottom", "left"],
-      5: ["left"],
-    },
-    6: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["right"],
-      4: ["bottom", "right"],
-      5: ["bottom", "left"],
-      6: ["left"],
-    },
-    7: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["right"],
-      4: ["right"],
-      5: ["bottom", "left"],
-      6: ["left"],
-      7: ["left"],
-    },
-    8: {
-      1: ["top", "left"],
-      2: ["top", "right"],
-      3: ["right"],
-      4: ["right"],
-      5: ["bottom", "right"],
-      6: ["bottom", "left"],
-      7: ["left"],
-      8: ["left"],
-    },
-  },
+interface HowlerSound {
+  type: string;
+  timestamp: number;
+  sounded?: {
+    [key: string]: boolean;
+  };
+}
+
+let HOWLER_SOUNDS: {
+  // Howlオブジェクトが入る
+  // eslint-disable-next-line
+  [key: string]: any;
 };
 
-export default {
+function checkSound(store: any) {
+  const userId = store.getters["whimClient/accessUser"].id;
+  const whimClientSounds =
+    store.getters["whimClient/appState"].whimClientSounds || [];
+  whimClientSounds.forEach((sound: HowlerSound, i: number) => {
+    if (!sound?.sounded || !sound.sounded[userId]) {
+      HOWLER_SOUNDS[sound.type].play();
+      store.dispatch("whimClient/assignState", {
+        whimClientSounds: { [i]: { sounded: { [userId]: true } } },
+      });
+    }
+  });
+}
+
+interface InstallOptions {
   // eslint-disable-next-line
-  install(Vue: Vue, options?: { [key: string]: any }): void {
+  store?: any;
+  sound?: {
+    [key: string]: {
+      src: string;
+      volume?: number;
+    };
+  };
+  targetOrigin?: string;
+}
+
+export default {
+  install(Vue: Vue, options?: InstallOptions): void {
     let store = options?.store;
     if (!store) {
       // @ts-ignore
@@ -125,6 +55,18 @@ export default {
 
     // Register vuex module
     store.registerModule("whimClient", whimStore);
+
+    // howler登録
+
+    HOWLER_SOUNDS = Object.fromEntries(
+      Object.entries(options?.sound || {}).map((sound) => {
+        const howl = new Howl({
+          src: sound[1].src,
+        });
+        howl.volume(sound[1].volume || 1.0);
+        return [sound[0], howl];
+      })
+    );
 
     if (window.innerWidth / window.innerHeight < 1) {
       store.commit("whimClient/setOrientation", "portrait");
@@ -165,6 +107,7 @@ export default {
         }
         if (event.data.appState) {
           store.commit("whimClient/setAppState", event.data.appState);
+          checkSound(store);
         }
       },
       false
@@ -182,6 +125,26 @@ export default {
         return store.dispatch("whimClient/assignState", obj);
       },
 
+      // eslint-disable-next-line
+      resetState(data: any = {}) {
+        return store.dispatch("whimClient/resetState", data);
+      },
+
+      sound(soundType: string) {
+        const whimClientSounds =
+          store.getters["whimClient/appState"].whimClientSounds || [];
+
+        whimClientSounds.push({
+          type: soundType,
+          timestamp: new Date().getTime(),
+        });
+
+        return store.dispatch("whimClient/assignState", {
+          whimClientSounds: whimClientSounds,
+        });
+      },
+
+      // 以下 v1.3で廃止予定
       // eslint-disable-next-line
       replaceState(obj: { [s: string]: any }) {
         return store.dispatch("whimClient/replaceState", obj);
@@ -203,11 +166,6 @@ export default {
 
       removeState(ref: string) {
         return store.dispatch("whimClient/removeState", ref);
-      },
-
-      // eslint-disable-next-line
-      resetState(data: any = {}) {
-        return store.dispatch("whimClient/resetState", data);
       },
     };
 
