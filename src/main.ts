@@ -13,9 +13,7 @@ interface HowlerSound {
 }
 
 let HOWLER_SOUNDS: {
-  // Howlオブジェクトが入る
-  // eslint-disable-next-line
-  [key: string]: any;
+  [key: string]: Howl;
 };
 
 function checkSound(store: any) {
